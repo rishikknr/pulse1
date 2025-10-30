@@ -5,22 +5,7 @@
   "installCommand": "pnpm install",
   "framework": "nextjs",
   "env": {
-    "DATABASE_URL": {
-      "description": "MySQL/TiDB database connection string",
-      "required": true
-    },
-    "JWT_SECRET": {
-      "description": "Session cookie signing secret",
-      "required": true
-    },
-    "VITE_APP_TITLE": {
-      "description": "Application title",
-      "default": "Pulse Uptime Monitor"
-    },
-    "VITE_APP_LOGO": {
-      "description": "Application logo URL",
-      "default": ""
-    }
+    
   },
   "rewrites": [
     {
