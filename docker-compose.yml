@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: pulse-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: pulse
+      MYSQL_USER: pulse_user
+      MYSQL_PASSWORD: pulse_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Pulse Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pulse-app
+    environment:
+      DATABASE_URL: mysql://pulse_user:pulse_password@db:3306/pulse
+      JWT_SECRET: your-secret-key-change-in-production
+      VITE_APP_TITLE: Pulse Uptime Monitor
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
